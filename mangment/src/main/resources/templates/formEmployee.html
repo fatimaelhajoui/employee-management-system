@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="mytemplate">
+    <head>
+        <title>Add Form</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/webjars/bootstrap/5.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
+    </head>
+    <body>
+        <div layout:fragment="content">
+        <div class="p-5">
+        <div class="card">
+            
+            <div class="card-header bg-success"><h4 style="color: white">Add Employee</h4></div>
+            <div class="card-body m-3">
+                <form method="post" th:action="@{save}" >
+                    <div>
+                        <label>Full Name</label>
+                        <input class="form-control" type="text" name="fullname" th:value="${employee.fullname}">
+                        <span class="text-danger" th:errors="${employee.fullname}"></span>
+                    </div>
+                    <br>
+                    <div >
+                        <label>Id Card (CIN)</label>
+                        <input class="form-control" type="text" name="cin" th:value="${employee.cin}">
+                        <span  class="text-danger" th:errors="${employee.cin}"></span>
+                    </div>
+                    <br>
+                    <div >
+                        <label>Email</label>
+                        <input class="form-control" type="text" name="email" th:value="${employee.email}">
+                        <span  class="text-danger" th:errors="${employee.email}"></span>
+                    </div>
+                    <br>
+                    <div >
+                        <label>Phone</label>
+                        <input class="form-control" type="text" name="phone" th:value="${employee.phone}">
+                        <span  class="text-danger" th:errors="${employee.phone}"></span>
+                    </div>
+                    <br>
+                    <div >
+                        <label>Hire Date</label>
+                        <input class="form-control" type="date" name="hiredate" th:value="${#temporals.format(employee.hiredate, 'yyyy-MM-dd')}">
+                        <span  class="text-danger" th:errors="${employee.hiredate}"></span>
+                    </div>
+                    <br>
+                    <div>
+                        <label>Salary</label>
+                        <input class="form-control" type="text" name="salary" th:value="${employee.salary}">
+                        <span  class="text-danger" th:errors="${employee.salary}"></span>
+                    </div>
+                    <br>
+                    <div >
+                        <label>Active</label>
+                        <input type="checkbox" name="active" th:checked="${employee.active}">
+                        <span  class="text-danger" th:errors="${employee.active}"></span>
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-success">Add Emplyee</button>
+                </form>
+                
+            </div>
+        </div>
+         </div>
+        </div>
+        
+        
+        
+   </body>
+</html>

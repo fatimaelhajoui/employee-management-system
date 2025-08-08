@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/webjars/bootstrap/5.3.7/css/bootstrap.min.css">
+  <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            max-width: 500px;
+            width: 100%;
+            min-height: 500px;
+        }
+
+        .login-form-section {
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .brand-title {
+            color: #333;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .brand-subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #28a745;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .login-button:hover {
+            background-color: #218838;
+        }
+
+        .demo-credentials {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .demo-credentials h6 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .demo-credentials div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        /* Custom animation for alerts */
+        .alert {
+            animation: slideInDown 0.3s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .login-form-section {
+                padding: 40px 30px;
+            }
+        }
+        </style>
+    </head>
+    <body>
+        <div class="login-container">
+            <!-- Login Form Section -->
+            <div class="login-form-section">
+                <h1 class="brand-title">Employee Login</h1>
+                <p class="brand-subtitle">Enter your credentials to access the system</p>
+
+                <!-- Bootstrap Error Alert for Invalid Login -->
+                <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <strong>Login Failed!</strong> Invalid username or password. Please try again.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                
+                <!-- Bootstrap Success Alert for Logout -->
+                <div th:if="${param.logout}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <strong>Success!</strong> You have been logged out successfully.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <!-- Bootstrap Info Alert for Session Expired -->
+                <div th:if="${param.expired}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <i class="bi bi-clock-fill me-2"></i>
+                    <strong>Session Expired!</strong> Your session has expired. Please log in again.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <!-- Bootstrap Info Alert for Access Denied -->
+                <div th:if="${param.denied}" class="alert alert-info alert-dismissible fade show" role="alert">
+                    <i class="bi bi-shield-exclamation me-2"></i>
+                    <strong>Access Denied!</strong> You don't have permission to access that resource. Please log in with appropriate credentials.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <form th:action="@{/login}" method="post">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" 
+                               id="username" 
+                               name="username" 
+                               class="form-control"
+                               th:class="${param.error} ? 'form-control is-invalid' : 'form-control'"
+                               required 
+                               autocomplete="username"
+                               placeholder="Enter your username">
+                        <div th:if="${param.error}" class="invalid-feedback">
+                            Please check your username.
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" 
+                               id="password" 
+                               name="password" 
+                               class="form-control"
+                               th:class="${param.error} ? 'form-control is-invalid' : 'form-control'"
+                               required 
+                               autocomplete="current-password"
+                               placeholder="Enter your password">
+                        <div th:if="${param.error}" class="invalid-feedback">
+                            Please check your password.
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input type="checkbox" name="remember-me" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">
+                                Remember me
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success login-button">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                    </button>
+                </form>
+
+                <div class="demo-credentials">
+                    <h6><i class="bi bi-info-circle me-2"></i>Demo Credentials:</h6>
+                    <div><span><strong>Username:</strong> user1</span> <span><strong>Password:</strong> 1234</span></div>
+                    <div><span><strong>Username:</strong> user2</span> <span><strong>Password:</strong> 1234</span></div>
+                    <div><span><strong>Username:</strong> admin</span> <span><strong>Password:</strong> 1234</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bootstrap JS for dismissible alerts -->
+        <script src="/webjars/bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
+        
+        <!-- Optional: Auto-dismiss alerts after 5 seconds -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Auto-dismiss success and info alerts after 5 seconds
+                const alerts = document.querySelectorAll('.alert-success, .alert-info, .alert-warning');
+                alerts.forEach(function(alert) {
+                    setTimeout(function() {
+                        const bsAlert = new bootstrap.Alert(alert);
+                        bsAlert.close();
+                    }, 5000);
+                });
+            });
+        </script>
+    </body>
+</html>
